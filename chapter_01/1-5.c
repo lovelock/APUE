@@ -1,32 +1,22 @@
-#include <sys/types.h>
-#include <sys/wait.h>
-#include "../ourhdr.h"
+#include "../apue.h"
 
-int main(void)
+/**
+ * I/O with stdio
+ */
+int
+main(void)
 {
-    char buf[MAXLINE];
-    pid_t pid;
-    int status;
+    int c;
 
-    printf("%% ");
-    while (fgets(buf, MAXLINE, stdin) != NULL) {
-        buf[strlen(buf) - 1] = 0;
-
-        if ( (pid = fork() < 0)) {
-            err_sys("error fork");
+    while ((c = getc(stdin)) != EOF) {
+        if (putc(c, stdout) == EOF) {
+            err_sys("output error");
         }
-
-        if (pid == 0) {
-            execlp(buf, buf, (char*) 0);
-            err_ret("couldn't execute: %s", buf);
-            exit(127);
-        }
-
-        if ( (pid = waitpid(pid, &status, 0)) < 0) {
-            err_sys("waitpid error");
-        }
-        printf("%% ");
-
-        exit(0);
     }
+
+    if (ferror(stdin)) {
+        err_sys("input error");
+    }
+
+    exit(0);
 }

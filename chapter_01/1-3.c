@@ -1,22 +1,29 @@
-#include "../ourhdr.h"
+#include <sys/types.h>
+#include <dirent.h>
+
+#include "../apue.h"
 
 /**
- * I/O with stdio
+ * ls(1)
  */
 int
-main(void)
+main(int argc, char *argv[])
 {
-    int c;
+	DIR *dp;
+	struct dirent *dirp;
 
-    while ((c = getc(stdin)) != EOF) {
-        if (putc(c, stdout) == EOF) {
-            err_sys("output error");
-        }
-    }
+	if (argc != 2)
+		err_quit("a single argument (the directory name) is required");
 
-    if (ferror(stdin)) {
-        err_sys("input error");
-    }
+	if ( (dp = opendir(argv[1])) == NULL)
+		err_sys("can't open %s", argv[1]);
 
-    exit(0);
+	while ( (dirp = readdir(dp)) != NULL)
+		printf("%s\n", dirp->d_name);
+
+	closedir(dp);
+
+	exit(0);
 }
+
+
