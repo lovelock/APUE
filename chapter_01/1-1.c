@@ -1,7 +1,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 
-#include "ourhdr.h"
+#include "../ourhdr.h"
 
 /**
  * ls(1)

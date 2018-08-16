@@ -1,4 +1,4 @@
-#include "ourhdr.h"
+#include "../ourhdr.h"
 
 /**
  * I/O with stdio
